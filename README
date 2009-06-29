@@ -1,0 +1,47 @@
+Truncator
+=========
+
+Adds a truncate_tables method to Rspec to clean out your test database. Extends ActiveRecord::Base with
+a truncate class method to truncate the table for any model.
+
+
+Installation
+============
+
+   $ script/plugin install git://github.com/james2m/truncator.git
+   
+then add to the end of your spec/spec_helper.rb
+
+   config.include Truncator
+   
+   
+Usage
+=====
+
+To truncate just the Photo table;
+
+   Photo.truncate
+   
+or
+
+   truncate_tables :photo
+   
+Specify :all to truncate all the tables in the database. For example
+
+   describe Widget do
+   
+     before(:each)
+       truncate_tables :all
+     end
+     
+     it "should create a widget" do
+       lambda do
+         Widget.create(:name => 'thang')
+       end.should change(Widget, :count)
+     end
+   
+   end
+
+   
+
+Copyright (c) 2009 [James McCarthy], released under the MIT license
