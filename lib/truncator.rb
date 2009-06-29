@@ -7,16 +7,17 @@ module Truncator
     
   # Add a truncate method to Rspec to take an array of table names or :all
   def truncate_tables(*tables)
-  
+      
     if tables.include?(:all)
       tables = ActiveRecord::Base.connection.tables - %w{schema_migrations}
     end
 
     tables.each do |table|
       begin
-        table.classify.constantize.truncate
+        table_name = table.to_s.pluralize.classify
+        table_name.constantize.truncate
       rescue
-        RAILS_DEFAULT_LOGGER.error "Unable to truncate table #{table}"
+        RAILS_DEFAULT_LOGGER.error "Unable to truncate table #{table_name}"
       end
     end
 
